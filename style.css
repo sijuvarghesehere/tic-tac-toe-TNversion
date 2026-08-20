@@ -1,0 +1,241 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #111;
+    color: white;
+
+    font-family: Arial, sans-serif;
+}
+
+
+/* GAME CONTAINER */
+
+.game {
+    text-align: center;
+}
+
+
+/* TITLE */
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+
+/* STATUS */
+
+.status {
+    font-size: 20px;
+    margin-bottom: 30px;
+
+    color: #aaa;
+}
+
+
+/* BOARD */
+
+.board {
+    width: 330px;
+    height: 330px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    position: relative;
+
+    margin: auto;
+}
+
+
+/* CELLS */
+
+.cell {
+    width: 110px;
+    height: 110px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 48px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    border-right: 3px solid #444;
+    border-bottom: 3px solid #444;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+/* REMOVE RIGHT BORDERS */
+
+.cell:nth-child(3),
+.cell:nth-child(6),
+.cell:nth-child(9) {
+    border-right: none;
+}
+
+
+/* REMOVE BOTTOM BORDERS */
+
+.cell:nth-child(7),
+.cell:nth-child(8),
+.cell:nth-child(9) {
+    border-bottom: none;
+}
+
+
+/* HOVER */
+
+.cell:hover {
+    background: #1c1c1c;
+}
+
+
+/* TV */
+
+.cell.tv {
+    color: #ff4d4d;
+
+    animation: pop 0.2s ease;
+}
+
+
+/* JV */
+
+.cell.jv {
+    color: #4da6ff;
+
+    animation: pop 0.2s ease;
+}
+
+
+/* POP ANIMATION */
+
+@keyframes pop {
+
+    0% {
+        transform: scale(0);
+    }
+
+    70% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* WINNING STRIKE */
+
+.strike {
+    position: absolute;
+
+    height: 6px;
+
+    width: 0;
+
+    left: 0;
+    top: 0;
+
+    background: white;
+
+    border-radius: 10px;
+
+    transform-origin: left center;
+
+    opacity: 0;
+
+    box-shadow:
+        0 0 8px white,
+        0 0 18px white;
+
+    transition:
+        width 0.5s ease,
+        opacity 0.2s ease;
+}
+
+
+/* RESTART BUTTON */
+
+button {
+    margin-top: 35px;
+
+    padding: 12px 25px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: white;
+    color: #111;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+button:hover {
+    transform: scale(1.05);
+
+    background: #ddd;
+}
+
+
+button:active {
+    transform: scale(0.95);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 400px) {
+
+    .board {
+        width: 300px;
+        height: 300px;
+    }
+
+    .cell {
+        width: 100px;
+        height: 100px;
+
+        font-size: 42px;
+    }
+
+    h1 {
+        font-size: 34px;
+    }
+
+    .status {
+        font-size: 18px;
+    }
+
+}
