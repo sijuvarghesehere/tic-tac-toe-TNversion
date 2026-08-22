@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,117 +12,692 @@
 
     <title>TV vs JV</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+
+        /* ==============================
+           RESET
+        ============================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* ==============================
+           PAGE
+        ============================== */
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+
+            min-height: 100dvh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 16px;
+
+            background: #101010;
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            overflow-x: hidden;
+        }
+
+
+        /* ==============================
+           GAME
+        ============================== */
+
+        .game {
+
+            width: 100%;
+            max-width: 420px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        /* ==============================
+           TITLE
+        ============================== */
+
+        h1 {
+
+            font-size: clamp(
+                32px,
+                10vw,
+                46px
+            );
+
+            line-height: 1;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+
+            color: #777;
+
+            font-size: 0.55em;
+
+            margin: 0 5px;
+        }
+
+
+        /* ==============================
+           SCOREBOARD
+        ============================== */
+
+        .scoreboard {
+
+            width: min(
+                100%,
+                300px
+            );
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+
+            margin-bottom: 16px;
+        }
+
+
+        .score-card {
+
+            text-align: center;
+
+            padding: 8px 4px;
+
+            background: #181818;
+
+            border: 1px solid #303030;
+
+            border-radius: 9px;
+        }
+
+
+        .player-label {
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            color: #777;
+
+            margin-bottom: 4px;
+        }
+
+
+        .score-number {
+
+            font-size: 26px;
+
+            font-weight: 800;
+
+            line-height: 1;
+        }
+
+
+        .tv-score {
+            color: #ff5050;
+        }
+
+        .draw-score {
+            color: #aaa;
+        }
+
+        .jv-score {
+            color: #4da0ff;
+        }
+
+
+        /* ==============================
+           STATUS
+        ============================== */
+
+        .status {
+
+            min-height: 25px;
+
+            margin-bottom: 18px;
+
+            font-size: clamp(
+                16px,
+                4.5vw,
+                20px
+            );
+
+            font-weight: 600;
+
+            color: #999;
+
+            text-align: center;
+        }
+
+
+        /* ==============================
+           BOARD
+        ============================== */
+
+        .board {
+
+            position: relative;
+
+            width: min(
+                86vw,
+                360px
+            );
+
+            aspect-ratio: 1 / 1;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            grid-template-rows:
+                repeat(3, 1fr);
+
+            background: transparent;
+
+            isolation: isolate;
+        }
+
+
+        /* ==============================
+           CELLS
+        ============================== */
+
+        .cell {
+
+            appearance: none;
+
+            -webkit-appearance: none;
+
+            width: 100%;
+            height: 100%;
+
+            border: 0;
+
+            outline: none;
+
+            background: transparent;
+
+            color: #ffffff;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 0;
+
+            margin: 0;
+
+            font-family: inherit;
+
+            font-size: clamp(
+                28px,
+                11vw,
+                52px
+            );
+
+            font-weight: 800;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+
+            -webkit-tap-highlight-color:
+                transparent;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* ==============================
+           GRID LINES
+        ============================== */
+
+        .cell:nth-child(1),
+        .cell:nth-child(2),
+        .cell:nth-child(4),
+        .cell:nth-child(5),
+        .cell:nth-child(7),
+        .cell:nth-child(8) {
+
+            border-right:
+                3px solid #3f3f3f;
+        }
+
+
+        .cell:nth-child(1),
+        .cell:nth-child(2),
+        .cell:nth-child(3),
+        .cell:nth-child(4),
+        .cell:nth-child(5),
+        .cell:nth-child(6) {
+
+            border-bottom:
+                3px solid #3f3f3f;
+        }
+
+
+        /* ==============================
+           HOVER
+        ============================== */
+
+        @media (hover: hover) {
+
+            .cell:hover {
+
+                background:
+                    rgba(255,255,255,0.035);
+            }
+
+        }
+
+
+        /* ==============================
+           TV
+        ============================== */
+
+        .cell.tv {
+
+            color: #ff5050;
+
+            animation:
+                popIn 0.2s ease-out;
+        }
+
+
+        /* ==============================
+           JV
+        ============================== */
+
+        .cell.jv {
+
+            color: #4da0ff;
+
+            animation:
+                popIn 0.2s ease-out;
+        }
+
+
+        /* ==============================
+           POP
+        ============================== */
+
+        @keyframes popIn {
+
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.12);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+
+        /* ==============================
+           WIN STRIKE
+        ============================== */
+
+        .strike {
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            height: 5px;
+
+            width: 0;
+
+            background: #ffffff;
+
+            border-radius: 100px;
+
+            transform-origin:
+                left center;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            z-index: 10;
+
+            box-shadow:
+                0 0 6px #ffffff,
+                0 0 16px rgba(
+                    255,
+                    255,
+                    255,
+                    0.65
+                );
+
+            transition:
+                width 0.45s ease,
+                opacity 0.15s ease;
+        }
+
+
+        /* ==============================
+           BUTTONS
+        ============================== */
+
+        .controls {
+
+            width: min(
+                100%,
+                360px
+            );
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 22px;
+        }
+
+
+        .controls button {
+
+            min-height: 44px;
+
+            border-radius: 9px;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            touch-action: manipulation;
+        }
+
+
+        .next-button {
+
+            border: none;
+
+            background: #ffffff;
+
+            color: #111111;
+        }
+
+
+        .reset-button {
+
+            border:
+                1px solid #383838;
+
+            background: #1b1b1b;
+
+            color: #ffffff;
+        }
+
+
+        .controls button:active {
+
+            transform: scale(0.96);
+        }
+
+
+        /* ==============================
+           VERY SMALL PHONES
+        ============================== */
+
+        @media (max-width: 350px) {
+
+            body {
+                padding: 12px;
+            }
+
+            h1 {
+                margin-bottom: 15px;
+            }
+
+            .scoreboard {
+                margin-bottom: 12px;
+            }
+
+            .status {
+                margin-bottom: 13px;
+            }
+
+            .board {
+                width: 88vw;
+            }
+
+            .controls {
+                margin-top: 16px;
+            }
+        }
+
+
+        /* ==============================
+           SHORT PHONES
+        ============================== */
+
+        @media (max-height: 650px) {
+
+            body {
+                align-items: flex-start;
+
+                padding-top: 12px;
+            }
+
+            h1 {
+                margin-bottom: 12px;
+            }
+
+            .scoreboard {
+                margin-bottom: 10px;
+            }
+
+            .status {
+                margin-bottom: 10px;
+            }
+
+            .board {
+                width: min(
+                    72vh,
+                    330px
+                );
+            }
+
+            .controls {
+                margin-top: 15px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
+
     <main class="game">
 
+
         <!-- TITLE -->
-        <h1>TV <span>vs</span> JV</h1>
+
+        <h1>
+            TV
+            <span>vs</span>
+            JV
+        </h1>
 
 
-        <!-- SCOREBOARD -->
-        <section class="scoreboard">
+        <!-- SCORE -->
 
-            <div class="score-card tv-card">
-                <div class="player-label">TV</div>
-                <div class="score-number" id="tvScore">0</div>
+        <div class="scoreboard">
+
+            <div class="score-card">
+                <div class="player-label">
+                    TV
+                </div>
+
+                <div
+                    class="score-number tv-score"
+                    id="tvScore"
+                >
+                    0
+                </div>
             </div>
 
-            <div class="score-card draw-card">
-                <div class="player-label">DRAW</div>
-                <div class="score-number" id="drawScore">0</div>
+
+            <div class="score-card">
+                <div class="player-label">
+                    DRAW
+                </div>
+
+                <div
+                    class="score-number draw-score"
+                    id="drawScore"
+                >
+                    0
+                </div>
             </div>
 
-            <div class="score-card jv-card">
-                <div class="player-label">JV</div>
-                <div class="score-number" id="jvScore">0</div>
+
+            <div class="score-card">
+                <div class="player-label">
+                    JV
+                </div>
+
+                <div
+                    class="score-number jv-score"
+                    id="jvScore"
+                >
+                    0
+                </div>
             </div>
 
-        </section>
+        </div>
 
 
         <!-- STATUS -->
+
         <div
             class="status"
             id="status"
-            aria-live="polite"
         >
             TV's Turn
         </div>
 
 
-        <!-- BOARD WRAPPER -->
-        <div class="board-wrapper">
+        <!-- BOARD -->
 
-            <!-- BOARD -->
-            <div
-                class="board"
-                id="board"
-                role="grid"
-                aria-label="Tic Tac Toe board"
-            >
+        <div
+            class="board"
+            id="board"
+        >
 
-                <button
-                    class="cell"
-                    data-index="0"
-                    aria-label="Tile 1"
-                ></button>
+            <button
+                class="cell"
+                data-index="0"
+                aria-label="Tile 1"
+            ></button>
 
-                <button
-                    class="cell"
-                    data-index="1"
-                    aria-label="Tile 2"
-                ></button>
+            <button
+                class="cell"
+                data-index="1"
+                aria-label="Tile 2"
+            ></button>
 
-                <button
-                    class="cell"
-                    data-index="2"
-                    aria-label="Tile 3"
-                ></button>
-
-                <button
-                    class="cell"
-                    data-index="3"
-                    aria-label="Tile 4"
-                ></button>
-
-                <button
-                    class="cell"
-                    data-index="4"
-                    aria-label="Tile 5"
-                ></button>
-
-                <button
-                    class="cell"
-                    data-index="5"
-                    aria-label="Tile 6"
-                ></button>
-
-                <button
-                    class="cell"
-                    data-index="6"
-                    aria-label="Tile 7"
-                ></button>
-
-                <button
-                    class="cell"
-                    data-index="7"
-                    aria-label="Tile 8"
-                ></button>
-
-                <button
-                    class="cell"
-                    data-index="8"
-                    aria-label="Tile 9"
-                ></button>
-
-            </div>
+            <button
+                class="cell"
+                data-index="2"
+                aria-label="Tile 3"
+            ></button>
 
 
-            <!-- WINNING STRIKE -->
+            <button
+                class="cell"
+                data-index="3"
+                aria-label="Tile 4"
+            ></button>
+
+            <button
+                class="cell"
+                data-index="4"
+                aria-label="Tile 5"
+            ></button>
+
+            <button
+                class="cell"
+                data-index="5"
+                aria-label="Tile 6"
+            ></button>
+
+
+            <button
+                class="cell"
+                data-index="6"
+                aria-label="Tile 7"
+            ></button>
+
+            <button
+                class="cell"
+                data-index="7"
+                aria-label="Tile 8"
+            ></button>
+
+            <button
+                class="cell"
+                data-index="8"
+                aria-label="Tile 9"
+            ></button>
+
+
+            <!-- STRIKE -->
+
             <div
                 class="strike"
                 id="strike"
@@ -131,17 +707,18 @@
 
 
         <!-- CONTROLS -->
+
         <div class="controls">
 
             <button
-                class="main-button"
+                class="next-button"
                 id="nextRound"
             >
                 Next Round
             </button>
 
             <button
-                class="secondary-button"
+                class="reset-button"
                 id="resetScore"
             >
                 Reset Score
@@ -149,10 +726,565 @@
 
         </div>
 
+
     </main>
 
 
-    <script src="script.js"></script>
+    <script>
+
+        /* =================================
+           ELEMENTS
+        ================================= */
+
+        const cells =
+            document.querySelectorAll(
+                ".cell"
+            );
+
+        const board =
+            document.getElementById(
+                "board"
+            );
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+        const strike =
+            document.getElementById(
+                "strike"
+            );
+
+        const tvScore =
+            document.getElementById(
+                "tvScore"
+            );
+
+        const jvScore =
+            document.getElementById(
+                "jvScore"
+            );
+
+        const drawScore =
+            document.getElementById(
+                "drawScore"
+            );
+
+        const nextRound =
+            document.getElementById(
+                "nextRound"
+            );
+
+        const resetScore =
+            document.getElementById(
+                "resetScore"
+            );
+
+
+        /* =================================
+           GAME STATE
+        ================================= */
+
+        let gameBoard = [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ];
+
+        let player =
+            "TV";
+
+        let active =
+            true;
+
+
+        /* =================================
+           SCORES
+        ================================= */
+
+        let scores = {
+            TV: 0,
+            JV: 0,
+            DRAW: 0
+        };
+
+
+        /* =================================
+           WIN PATTERNS
+        ================================= */
+
+        const wins = [
+
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+
+            [0, 4, 8],
+            [2, 4, 6]
+
+        ];
+
+
+        /* =================================
+           CELL CLICK
+        ================================= */
+
+        cells.forEach(
+            function(cell) {
+
+                cell.addEventListener(
+                    "click",
+                    function() {
+
+                        makeMove(
+                            cell
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =================================
+           MAKE MOVE
+        ================================= */
+
+        function makeMove(cell) {
+
+            if (!active) {
+                return;
+            }
+
+
+            const index =
+                parseInt(
+                    cell.dataset.index,
+                    10
+                );
+
+
+            /* Important:
+               Tile 9 = index 8
+            */
+
+            if (
+                isNaN(index) ||
+                index < 0 ||
+                index > 8
+            ) {
+                return;
+            }
+
+
+            if (
+                gameBoard[index] !== ""
+            ) {
+                return;
+            }
+
+
+            /* SAVE */
+
+            gameBoard[index] =
+                player;
+
+
+            /* DISPLAY */
+
+            cell.textContent =
+                player;
+
+
+            cell.classList.add(
+                player === "TV"
+                    ? "tv"
+                    : "jv"
+            );
+
+
+            /* CHECK */
+
+            checkGame();
+
+        }
+
+
+        /* =================================
+           CHECK GAME
+        ================================= */
+
+        function checkGame() {
+
+            for (
+                const pattern of wins
+            ) {
+
+                const a =
+                    pattern[0];
+
+                const b =
+                    pattern[1];
+
+                const c =
+                    pattern[2];
+
+
+                if (
+
+                    gameBoard[a] !== "" &&
+
+                    gameBoard[a] ===
+                    gameBoard[b] &&
+
+                    gameBoard[a] ===
+                    gameBoard[c]
+
+                ) {
+
+                    winGame(
+                        pattern
+                    );
+
+                    return;
+                }
+
+            }
+
+
+            /* DRAW */
+
+            if (
+                gameBoard.every(
+                    value =>
+                        value !== ""
+                )
+            ) {
+
+                drawGame();
+
+                return;
+            }
+
+
+            /* CHANGE PLAYER */
+
+            player =
+                player === "TV"
+                    ? "JV"
+                    : "TV";
+
+
+            status.textContent =
+                player + "'s Turn";
+
+        }
+
+
+        /* =================================
+           WIN GAME
+        ================================= */
+
+        function winGame(pattern) {
+
+            active = false;
+
+
+            scores[player]++;
+
+
+            updateScores();
+
+
+            status.textContent =
+                player + " Wins!";
+
+
+            drawStrike(
+                pattern
+            );
+
+        }
+
+
+        /* =================================
+           DRAW GAME
+        ================================= */
+
+        function drawGame() {
+
+            active = false;
+
+
+            scores.DRAW++;
+
+
+            updateScores();
+
+
+            status.textContent =
+                "It's a Draw!";
+
+        }
+
+
+        /* =================================
+           UPDATE SCORE
+        ================================= */
+
+        function updateScores() {
+
+            tvScore.textContent =
+                scores.TV;
+
+            jvScore.textContent =
+                scores.JV;
+
+            drawScore.textContent =
+                scores.DRAW;
+
+        }
+
+
+        /* =================================
+           STRIKE
+        ================================= */
+
+        function drawStrike(
+            pattern
+        ) {
+
+            const first =
+                cells[
+                    pattern[0]
+                ];
+
+            const last =
+                cells[
+                    pattern[2]
+                ];
+
+
+            const boardRect =
+                board.getBoundingClientRect();
+
+            const firstRect =
+                first.getBoundingClientRect();
+
+            const lastRect =
+                last.getBoundingClientRect();
+
+
+            /* CENTER POINTS */
+
+            const x1 =
+                firstRect.left +
+                firstRect.width / 2 -
+                boardRect.left;
+
+
+            const y1 =
+                firstRect.top +
+                firstRect.height / 2 -
+                boardRect.top;
+
+
+            const x2 =
+                lastRect.left +
+                lastRect.width / 2 -
+                boardRect.left;
+
+
+            const y2 =
+                lastRect.top +
+                lastRect.height / 2 -
+                boardRect.top;
+
+
+            /* DISTANCE */
+
+            const dx =
+                x2 - x1;
+
+            const dy =
+                y2 - y1;
+
+
+            const length =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+
+            /* ANGLE */
+
+            const angle =
+                Math.atan2(
+                    dy,
+                    dx
+                ) *
+                180 /
+                Math.PI;
+
+
+            /* RESET */
+
+            strike.style.transition =
+                "none";
+
+            strike.style.width =
+                "0px";
+
+            strike.style.opacity =
+                "0";
+
+            strike.style.left =
+                x1 + "px";
+
+            strike.style.top =
+                y1 + "px";
+
+            strike.style.transform =
+                "rotate(" +
+                angle +
+                "deg)";
+
+
+            /* Force browser
+               to apply reset */
+
+            void strike.offsetWidth;
+
+
+            /* SHOW */
+
+            strike.style.transition =
+                "width 0.45s ease, opacity 0.15s ease";
+
+            strike.style.opacity =
+                "1";
+
+
+            requestAnimationFrame(
+                function() {
+
+                    strike.style.width =
+                        length + "px";
+
+                }
+            );
+
+        }
+
+
+        /* =================================
+           NEXT ROUND
+        ================================= */
+
+        nextRound.addEventListener(
+            "click",
+            function() {
+
+                newRound();
+
+            }
+        );
+
+
+        function newRound() {
+
+            gameBoard = [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ];
+
+
+            player =
+                "TV";
+
+
+            active =
+                true;
+
+
+            status.textContent =
+                "TV's Turn";
+
+
+            cells.forEach(
+                function(cell) {
+
+                    cell.textContent =
+                        "";
+
+                    cell.classList.remove(
+                        "tv",
+                        "jv"
+                    );
+
+                }
+            );
+
+
+            strike.style.transition =
+                "none";
+
+            strike.style.width =
+                "0px";
+
+            strike.style.opacity =
+                "0";
+
+            strike.style.transform =
+                "rotate(0deg)";
+
+        }
+
+
+        /* =================================
+           RESET SCORE
+        ================================= */
+
+        resetScore.addEventListener(
+            "click",
+            function() {
+
+                scores = {
+                    TV: 0,
+                    JV: 0,
+                    DRAW: 0
+                };
+
+
+                updateScores();
+
+
+                newRound();
+
+            }
+        );
+
+    </script>
 
 </body>
 
