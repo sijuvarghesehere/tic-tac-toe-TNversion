@@ -1,4 +1,9 @@
-const cells = document.querySelectorAll(".cell");
+/* ========================================
+   GET HTML ELEMENTS
+======================================== */
+
+const cells =
+    document.querySelectorAll(".cell");
 
 const statusText =
     document.getElementById("status");
@@ -6,122 +11,229 @@ const statusText =
 const restartButton =
     document.getElementById("restart");
 
+const resetScoreButton =
+    document.getElementById("resetScore");
+
 const strike =
     document.getElementById("strike");
 
+const tvScoreDisplay =
+    document.getElementById("tvScore");
 
-/* GAME BOARD */
+const jvScoreDisplay =
+    document.getElementById("jvScore");
+
+const drawScoreDisplay =
+    document.getElementById("drawScore");
+
+
+/* ========================================
+   GAME BOARD
+======================================== */
 
 let board = [
+
     "",
     "",
     "",
+
     "",
     "",
+    "",
+
     "",
     "",
     ""
+
 ];
 
 
-/* CURRENT PLAYER */
+/* ========================================
+   CURRENT PLAYER
+======================================== */
 
 let currentPlayer = "TV";
 
 
-/* GAME STATUS */
+/* ========================================
+   GAME ACTIVE
+======================================== */
 
 let gameActive = true;
 
 
-/* WINNING COMBINATIONS */
+/* ========================================
+   SCORES
+======================================== */
+
+let tvScore = 0;
+
+let jvScore = 0;
+
+let drawScore = 0;
+
+
+/* ========================================
+   WINNING PATTERNS
+======================================== */
 
 const winningPatterns = [
 
-    // Rows
+    /* ROWS */
+
     [0, 1, 2],
+
     [3, 4, 5],
+
     [6, 7, 8],
 
-    // Columns
+
+    /* COLUMNS */
+
     [0, 3, 6],
+
     [1, 4, 7],
+
     [2, 5, 8],
 
-    // Diagonals
+
+    /* DIAGONALS */
+
     [0, 4, 8],
+
     [2, 4, 6]
 
 ];
 
 
-/* CELL CLICK */
+/* ========================================
+   CELL CLICK EVENTS
+======================================== */
 
 cells.forEach(cell => {
 
-    cell.addEventListener("click", () => {
-
-        const index =
-            cell.dataset.index;
-
-
-        /* Don't allow occupied cells */
-
-        if (
-            board[index] !== "" ||
-            !gameActive
-        ) {
-            return;
-        }
-
-
-        /* Add player to board */
-
-        board[index] =
-            currentPlayer;
-
-
-        /* Display player */
-
-        cell.textContent =
-            currentPlayer;
-
-
-        /* Add player styling */
-
-        if (currentPlayer === "TV") {
-
-            cell.classList.add("tv");
-
-        } else {
-
-            cell.classList.add("jv");
-
-        }
-
-
-        /* Check game */
-
-        checkWinner();
-
-    });
+    cell.addEventListener(
+        "click",
+        handleCellClick
+    );
 
 });
 
 
-/* CHECK WINNER */
+/* ========================================
+   HANDLE CELL CLICK
+======================================== */
+
+function handleCellClick() {
+
+
+    /*
+       Get the exact clicked tile.
+
+       Number() makes sure the value
+       is treated as a number.
+    */
+
+    const index =
+        Number(
+            this.dataset.index
+        );
+
+
+    /*
+       Don't allow moves when:
+
+       - Cell is already occupied
+       - Game is finished
+    */
+
+    if (
+
+        board[index] !== "" ||
+
+        !gameActive
+
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Save player's move.
+    */
+
+    board[index] =
+        currentPlayer;
+
+
+    /*
+       Display player.
+    */
+
+    this.textContent =
+        currentPlayer;
+
+
+    /*
+       Add player class.
+    */
+
+    if (
+        currentPlayer === "TV"
+    ) {
+
+        this.classList.add("tv");
+
+    }
+
+    else {
+
+        this.classList.add("jv");
+
+    }
+
+
+    /*
+       Check whether someone won
+       or the game is a draw.
+    */
+
+    checkWinner();
+
+}
+
+
+/* ========================================
+   CHECK WINNER
+======================================== */
 
 function checkWinner() {
+
+
+    /*
+       Check every winning combination.
+    */
 
     for (
         let pattern of winningPatterns
     ) {
 
+
         const [a, b, c] =
             pattern;
 
 
-        /* Check if three are equal */
+        /*
+           Example:
+
+           TV TV TV
+
+           If all three positions
+           contain the same player,
+           that player wins.
+        */
 
         if (
 
@@ -133,18 +245,51 @@ function checkWinner() {
 
         ) {
 
-            /* Game over */
+
+            /*
+               Stop the game.
+            */
 
             gameActive = false;
 
 
-            /* Winner message */
+            /*
+               Update winner score.
+            */
+
+            if (
+                currentPlayer === "TV"
+            ) {
+
+                tvScore++;
+
+            }
+
+            else {
+
+                jvScore++;
+
+            }
+
+
+            /*
+               Update scoreboard.
+            */
+
+            updateScoreDisplay();
+
+
+            /*
+               Display winner.
+            */
 
             statusText.textContent =
                 `${currentPlayer} Wins!`;
 
 
-            /* Show strike */
+            /*
+               Display animated strike.
+            */
 
             showStrike(pattern);
 
@@ -156,34 +301,71 @@ function checkWinner() {
     }
 
 
-    /* CHECK DRAW */
+    /* ====================================
+       CHECK DRAW
+    ==================================== */
 
-    if (!board.includes("")) {
+    if (
+        !board.includes("")
+    ) {
+
+
+        /*
+           Stop game.
+        */
 
         gameActive = false;
 
+
+        /*
+           Increase draw score.
+        */
+
+        drawScore++;
+
+
+        /*
+           Update scoreboard.
+        */
+
+        updateScoreDisplay();
+
+
+        /*
+           Display draw message.
+        */
+
         statusText.textContent =
             "It's a Draw!";
+
 
         return;
 
     }
 
 
-    /* SWITCH PLAYER */
+    /* ====================================
+       SWITCH PLAYER
+    ==================================== */
 
-    if (currentPlayer === "TV") {
+    if (
+        currentPlayer === "TV"
+    ) {
 
         currentPlayer = "JV";
 
-    } else {
+    }
+
+    else {
 
         currentPlayer = "TV";
 
     }
 
 
-    /* Update status */
+    /*
+       Update status.
+    */
 
     statusText.textContent =
         `${currentPlayer}'s Turn`;
@@ -191,21 +373,50 @@ function checkWinner() {
 }
 
 
-/* SHOW WINNING STRIKE */
+/* ========================================
+   UPDATE SCOREBOARD
+======================================== */
+
+function updateScoreDisplay() {
+
+
+    tvScoreDisplay.textContent =
+        tvScore;
+
+
+    jvScoreDisplay.textContent =
+        jvScore;
+
+
+    drawScoreDisplay.textContent =
+        drawScore;
+
+}
+
+
+/* ========================================
+   SHOW WINNING STRIKE
+======================================== */
 
 function showStrike(pattern) {
+
 
     const [a, b, c] =
         pattern;
 
 
-    /* Get board */
+    /*
+       Get board position.
+    */
 
     const boardElement =
         document.getElementById("board");
 
 
-    /* Get positions */
+    /*
+       Get first and last
+       winning cells.
+    */
 
     const cellA =
         cells[a];
@@ -214,47 +425,78 @@ function showStrike(pattern) {
         cells[c];
 
 
+    /*
+       Get board rectangle.
+    */
+
     const boardRect =
-        boardElement.getBoundingClientRect();
+        boardElement
+            .getBoundingClientRect();
+
+
+    /*
+       Get cell rectangles.
+    */
 
     const rectA =
-        cellA.getBoundingClientRect();
+        cellA
+            .getBoundingClientRect();
 
     const rectC =
-        cellC.getBoundingClientRect();
+        cellC
+            .getBoundingClientRect();
 
 
-    /* START POINT */
+    /* ====================================
+       START POINT
+    ==================================== */
 
     const x1 =
+
         rectA.left +
+
         rectA.width / 2 -
+
         boardRect.left;
 
 
     const y1 =
+
         rectA.top +
+
         rectA.height / 2 -
+
         boardRect.top;
 
 
-    /* END POINT */
+    /* ====================================
+       END POINT
+    ==================================== */
 
     const x2 =
+
         rectC.left +
+
         rectC.width / 2 -
+
         boardRect.left;
 
 
     const y2 =
+
         rectC.top +
+
         rectC.height / 2 -
+
         boardRect.top;
 
 
-    /* CALCULATE DISTANCE */
+    /* ====================================
+       CALCULATE LINE LENGTH
+    ==================================== */
 
     const length =
+
         Math.sqrt(
 
             Math.pow(
@@ -272,23 +514,32 @@ function showStrike(pattern) {
         );
 
 
-    /* CALCULATE ANGLE */
+    /* ====================================
+       CALCULATE ANGLE
+    ==================================== */
 
     const angle =
+
         Math.atan2(
 
             y2 - y1,
 
             x2 - x1
 
-        ) *
+        )
 
-        180 /
+        *
+
+        180
+
+        /
 
         Math.PI;
 
 
-    /* POSITION STRIKE */
+    /* ====================================
+       POSITION STRIKE
+    ==================================== */
 
     strike.style.left =
         `${x1}px`;
@@ -297,18 +548,25 @@ function showStrike(pattern) {
         `${y1}px`;
 
 
-    /* ROTATE STRIKE */
+    /* ====================================
+       ROTATE STRIKE
+    ==================================== */
 
     strike.style.transform =
         `rotate(${angle}deg)`;
 
 
-    /* SHOW STRIKE */
+    /* ====================================
+       SHOW STRIKE
+    ==================================== */
 
-    strike.style.opacity = "1";
+    strike.style.opacity =
+        "1";
 
 
-    /* ANIMATE STRIKE */
+    /* ====================================
+       ANIMATE STRIKE
+    ==================================== */
 
     requestAnimationFrame(() => {
 
@@ -320,7 +578,9 @@ function showStrike(pattern) {
 }
 
 
-/* RESTART GAME */
+/* ========================================
+   NEXT ROUND BUTTON
+======================================== */
 
 restartButton.addEventListener(
     "click",
@@ -328,41 +588,63 @@ restartButton.addEventListener(
 );
 
 
+/* ========================================
+   RESTART GAME
+======================================== */
+
 function restartGame() {
 
 
-    /* RESET BOARD */
+    /*
+       Clear board.
+
+       Score remains unchanged.
+    */
 
     board = [
+
         "",
         "",
         "",
+
         "",
         "",
         "",
+
         "",
         "",
         ""
+
     ];
 
 
-    /* RESET PLAYER */
+    /*
+       TV always starts
+       the next round.
+    */
 
-    currentPlayer = "TV";
+    currentPlayer =
+        "TV";
 
 
-    /* ACTIVATE GAME */
+    /*
+       Activate game.
+    */
 
     gameActive = true;
 
 
-    /* RESET STATUS */
+    /*
+       Update status.
+    */
 
     statusText.textContent =
         "TV's Turn";
 
 
-    /* CLEAR CELLS */
+    /*
+       Clear every cell.
+    */
 
     cells.forEach(cell => {
 
@@ -376,13 +658,71 @@ function restartGame() {
     });
 
 
-    /* RESET STRIKE */
+    /*
+       Reset winning strike.
+    */
 
-    strike.style.width = "0";
+    strike.style.width =
+        "0";
 
-    strike.style.opacity = "0";
+    strike.style.opacity =
+        "0";
 
     strike.style.transform =
         "rotate(0deg)";
+
+}
+
+
+/* ========================================
+   RESET SCORE BUTTON
+======================================== */
+
+resetScoreButton.addEventListener(
+    "click",
+    resetScores
+);
+
+
+/* ========================================
+   RESET SCORES
+======================================== */
+
+function resetScores() {
+
+
+    /*
+       Reset TV score.
+    */
+
+    tvScore = 0;
+
+
+    /*
+       Reset JV score.
+    */
+
+    jvScore = 0;
+
+
+    /*
+       Reset draw score.
+    */
+
+    drawScore = 0;
+
+
+    /*
+       Update scoreboard.
+    */
+
+    updateScoreDisplay();
+
+
+    /*
+       Start fresh round.
+    */
+
+    restartGame();
 
 }
