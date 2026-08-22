@@ -3,96 +3,155 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>TV vs JV - Tic Tac Toe</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>TV vs JV</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="game">
+    <main class="game">
 
         <!-- TITLE -->
-        <h1>TV vs JV</h1>
+        <h1>TV <span>vs</span> JV</h1>
 
 
         <!-- SCOREBOARD -->
-        <div class="scoreboard">
+        <section class="scoreboard">
 
-            <div class="score-box tv-score">
-                <div class="player-name">TV</div>
-                <div class="score" id="tvScore">0</div>
+            <div class="score-card tv-card">
+                <div class="player-label">TV</div>
+                <div class="score-number" id="tvScore">0</div>
             </div>
 
-            <div class="score-box draw-score">
-                <div class="player-name">DRAW</div>
-                <div class="score" id="drawScore">0</div>
+            <div class="score-card draw-card">
+                <div class="player-label">DRAW</div>
+                <div class="score-number" id="drawScore">0</div>
             </div>
 
-            <div class="score-box jv-score">
-                <div class="player-name">JV</div>
-                <div class="score" id="jvScore">0</div>
+            <div class="score-card jv-card">
+                <div class="player-label">JV</div>
+                <div class="score-number" id="jvScore">0</div>
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- GAME STATUS -->
-        <div class="status" id="status">
+        <!-- STATUS -->
+        <div
+            class="status"
+            id="status"
+            aria-live="polite"
+        >
             TV's Turn
         </div>
 
 
-        <!-- GAME BOARD -->
-        <div class="board" id="board">
+        <!-- BOARD WRAPPER -->
+        <div class="board-wrapper">
 
-            <!-- ROW 1 -->
-            <div class="cell" data-index="0"></div>
-            <div class="cell" data-index="1"></div>
-            <div class="cell" data-index="2"></div>
+            <!-- BOARD -->
+            <div
+                class="board"
+                id="board"
+                role="grid"
+                aria-label="Tic Tac Toe board"
+            >
 
-            <!-- ROW 2 -->
-            <div class="cell" data-index="3"></div>
-            <div class="cell" data-index="4"></div>
-            <div class="cell" data-index="5"></div>
+                <button
+                    class="cell"
+                    data-index="0"
+                    aria-label="Tile 1"
+                ></button>
 
-            <!-- ROW 3 -->
-            <div class="cell" data-index="6"></div>
-            <div class="cell" data-index="7"></div>
-            <div class="cell" data-index="8"></div>
+                <button
+                    class="cell"
+                    data-index="1"
+                    aria-label="Tile 2"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="2"
+                    aria-label="Tile 3"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="3"
+                    aria-label="Tile 4"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="4"
+                    aria-label="Tile 5"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="5"
+                    aria-label="Tile 6"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="6"
+                    aria-label="Tile 7"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="7"
+                    aria-label="Tile 8"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="8"
+                    aria-label="Tile 9"
+                ></button>
+
+            </div>
 
 
             <!-- WINNING STRIKE -->
-
             <div
                 class="strike"
-                id="strike">
-            </div>
+                id="strike"
+            ></div>
 
         </div>
 
 
-        <!-- GAME BUTTONS -->
-        <div class="buttons">
+        <!-- CONTROLS -->
+        <div class="controls">
 
-            <button id="restart">
+            <button
+                class="main-button"
+                id="nextRound"
+            >
                 Next Round
             </button>
 
             <button
+                class="secondary-button"
                 id="resetScore"
-                class="reset-score">
+            >
                 Reset Score
             </button>
 
         </div>
 
-    </div>
+    </main>
 
 
-    <!-- JAVASCRIPT -->
     <script src="script.js"></script>
 
 </body>
